@@ -1,0 +1,51 @@
+3\纯 CSS 导航栏下划线跟随效果
+/*<body> 
+	<ul>
+	  <li>不可思议的CSS</li>
+	  <li>导航栏</li>
+	  <li>光标小下划线跟随</li>
+	  <li>PURE CSS</li>
+	  <li>Nav Underline</li>
+	</ul>
+	<script src="test.js"></script>
+</body>
+*/
+*{
+	margin: 0;
+	padding: 0;
+}
+body{
+	font-family: "微软雅黑";
+	font-size: 20px;
+}
+ul{
+	position: absolute;
+	top: 100px;
+	left: 200px;
+}
+li{
+	padding: 10px 5px;
+	text-decoration: none;
+	display: inline-block;
+}
+li{
+	position: relative;
+	cursor: pointer;
+}
+li::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 0;
+    height: 100%;
+    border-bottom: 2px solid #000;
+    transition: all 0.2s linear;
+}
+li:hover::before {
+	left: 0;
+    width: 100%;
+}
+li:hover + li::before {
+    left: 0;
+}

@@ -1,0 +1,124 @@
+<!DOCTYPE html> 
+<html> 
+<head>
+	<meta charset="utf-8" />
+	<title>VUE4</title>
+	<script src="../jquery.min.js"></script>
+	<script src="../vue.js"></script>
+	<link type="text/css" rel='stylesheet' href="../vue.css"></link>
+</head>
+<body>
+	<div id="app">
+		<!--在 <template> 元素上使用 v-if 指令渲染分组
+			如果想同时切换多个元素，可以把一个 <template> 元素当做不可见的包裹元素，并在上面使用 v-if。
+			如果元素 <template> 使用 v-if，将提出它的内容作为条件块，最终的渲染结果将不包含 <template> 元素。
+        -->
+		<template v-if="ok">
+			<h1>Title</h1>
+  			<p>Paragraph</p>
+		</template>
+		
+		<!--v-if & v-else-if & v-else
+			你可以使用 v-else 指令来表示 v-if 的“else 块”,
+			也可以使用 v-else-if 指令来表示 v-if 的“else-if 块”
+		-->
+		<div v-if="type === 'A'">A</div>
+		<div v-else-if="type === 'B'">B</div>
+		<div v-else-if="type === 'C'">C</div>
+		<div v-else>Not A/B/C</div>
+		
+		<!--Vue.js的特殊特性key
+			如果不使用 key，Vue 会使用一种最大限度减少动态元素并且尽可能地尝试修复/再利用相同类型元素的算法。
+			1、使用 key，它会基于 key 的变化重新排列元素顺序，并且会移除 key 不存在的元素。
+			2、key 也可以用于强制替换元素/组件而不是重复使用它，添加一个具有唯一值的 key 属性表示元素是完全独立的。
+			如下两个<input> 元素是相互独立的，不会被复用，而<label> 元素仍然会被高效地复用。
+		-->
+		<template v-if="loginType === 'username'">
+		  	<label>Username</label>
+		  	<input placeholder="Enter your username" key="username-input">
+		</template>
+		<template v-else>
+		  	<label>Email</label>
+		  	<input placeholder="Enter your email address" key="email-input">
+		</template>
+		<button @click="toggle">change login type</button>
+		
+		<!--v-if vs v-show
+			v-if 是“真正”的条件渲染，因为它会确保在切换过程中条件块内的事件监听器和子组件适当地被销毁和重建。
+			v-if 也是惰性的：如果在初始渲染时条件为假，则什么也不做——直到条件第一次变为真时，才会开始渲染条件块。
+			相比之下，v-show 就简单得多——不管初始条件是什么，元素总是会被渲染，并且只是简单地基于 CSS 进行切换。
+			一般来说，v-if 有更高的切换开销，而 v-show 有更高的初始渲染开销。
+			因此，如果需要非常频繁地切换，则使用 v-show 较好；如果在运行时条件很少改变，则使用 v-if 较好。
+		-->
+		<div v-show="showOk">
+			v-show 指令根据表达式值的真假切换元素的 display CSS 属性。
+			v-show 指令表达式值为 false 时为元素添加特性 style="display: none;"。
+			v-show 指令不支持 template 元素，也不支持 v-else指令。
+		</div>
+		<div v-if="ifOk">
+			v-if 指令根据表达式值的真假渲染元素。在切换时元素及它的数据绑定 / 组件被销毁并重建。
+			v-if 指令表达式值为 false 时元素变为注释节点	&lt;!----&gt;。
+		</div>
+		
+		<!--v-if 与 v-for 一起使用
+			当 v-if 与 v-for 一起使用时，v-for 具有比 v-if 更高的优先级。
+			但是永远不要把 v-if 和 v-for 同时用在同一个元素上。
+			一般我们在两种常见的情况下会倾向于这样做：
+        -->
+        <!--1、为了过滤一个列表中的项目 (比如 v-for="user in users" v-if="user.isActive")。
+        	在这种情形下，请将 users 替换为一个计算属性 (比如 activeUsers)，让其返回过滤后的列表。
+        	第一种方式哪怕我们只渲染出一小部分用户的元素，也得在每次重渲染的时候遍历整个列表，
+        	不论活跃用户是否发生了变化。
+        	而第二种方式使用了计算属性，过滤后的列表只会在 users 数组发生相关变化时才被重新运算，过滤更高效。
+        	另外，使用 v-for="user in activeUsers" 时，我们在渲染的时候只遍历活跃用户，渲染更高效。
+        	最后，解藕渲染层的逻辑，可维护性 (对逻辑的更改和扩展) 更强。
+        -->
+        <ul>
+        	Bad Way
+		  	<li v-for="user in users"
+		    	v-if="user.isActive"
+		    	:key="user.id">
+		    	{{ user.name }}
+		  	</li>
+		</ul>
+		<ul>
+			Good Way
+		  	<li v-for="user in activeUsers"
+		    	:key="user.id">
+		    	{{ user.name }}
+		  	</li>
+		</ul>
+		<!--2、为了避免渲染本应该被隐藏的列表 (比如 v-for="user in users" v-if="shouldShowUsers")。
+			这种情形下，请将 v-if 移动至容器元素上 (比如 ul, ol)。
+			将 v-if 移动到容器元素，我们不会再对列表中的每个用户检查 shouldShowUsers。
+			取而代之的是，我们只检查它一次，且不会在 shouldShowUsers 为 false 的时候运算 v-for。
+        -->
+        <ul>
+        	Bad Way
+		  	<li v-for="user in users"
+		    	v-if="shouldShowUsers"
+		    	:key="user.id">
+		    	{{ user.name }}
+		  	</li>
+		</ul>
+		<ul v-if="shouldShowUsers">
+			Good Way
+		  	<li v-for="user in users"
+		    	:key="user.id">
+		    	{{ user.name }}
+		  	</li>
+		</ul>
+	</div>
+	
+	<!--template 标签
+		template 标签是用来存储的内容片段，是一种用于保存客户端内容的机制，该内容在加载页面时不会呈现，
+		但随后可以在运行时使用JavaScript进行实例化。
+		虽然解析器在加载页面时会处理<template>元素的内容，但它只是为了确保这些内容有效，元素的内容并不会被渲染。
+	-->
+	<template>
+		<div>You cannot see me!</div>
+	</template>
+	
+	<script src="../vue-js/vue-base4.js"></script>
+</body> 
+</html>

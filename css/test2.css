@@ -1,0 +1,66 @@
+2\HTML5 + CSS3 实现地球-太阳自转和公转
+html:
+<!DOCTYPE html> 
+<html> 
+<head>
+	<meta charset="utf-8" />
+	<title>地球-太阳自转与公转</title> 
+	<link type="text/css" rel='stylesheet' href="test.css"></link> 
+</head> 
+<body> 
+	<div class="box">
+		<canvas id="sun" width="150px" height="150px"></canvas>
+		<canvas id="earth" width="50px" height="50px"></canvas>
+	</div>
+	<script src="test.js"></script>
+</body> 
+</html>
+
+css:
+*{
+	margin: 0;
+	padding: 0;
+}
+.box{
+	width: 150px;
+	height: 150px;
+	margin: 100px auto;
+	position: relative;
+	transform-style: preserve-3d;
+	/*perspective: 10000px;*/
+	animation: sun linear 365s infinite;	/*地球公转*/
+}
+#sun{
+	position: absolute;
+	animation: sun linear 26.7s infinite;		/*太阳自转+误差*/
+}
+#earth{
+	margin: 50px;
+	position: absolute;
+	transform: translateZ(600px);
+	animation: earth linear 1s infinite;	/*地球自转*/
+}
+@keyframes sun{
+	from{transform: rotateY(0deg);}
+	to{transform: rotateY(360deg);}
+}
+@keyframes earth{
+	from{transform: translateZ(600px) rotateY(0deg);}
+	to{transform: translateZ(600px) rotateY(360deg);}
+}
+
+js:
+var sun = document.getElementById("sun").getContext('2d'),
+	earth = document.getElementById('earth').getContext('2d'),
+	gra1 = sun.createRadialGradient(75,75,0,75,75,75),
+	gra2 = earth.createRadialGradient(25,25,0,25,25,25);
+gra1.addColorStop(0,'#ffff00');
+gra1.addColorStop(1,'#ff9900');
+sun.arc(75,75,75,0,2 * Math.PI);
+sun.fillStyle = gra1;
+sun.fill();
+gra2.addColorStop(0,'#78b1e8');
+gra2.addColorStop(1,'#1c4364');
+earth.arc(25,25,25,0,2 * Math.PI);
+earth.fillStyle = gra2;
+earth.fill();

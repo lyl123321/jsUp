@@ -1,0 +1,36 @@
+<!DOCTYPE html> 
+<html> 
+<head>
+	<meta charset="utf-8" />
+	<title>VUE3</title>
+	<script src="../jquery.min.js"></script>
+	<script src="../vue.js"></script>
+	<link type="text/css" rel='stylesheet' href="../test.css"></link>
+</head> 
+<body>
+	<div id="app">
+		<!--对于所有的数据绑定，Vue.js 都提供了完全的 JavaScript 表达式支持。-->
+		<!--模板表达式只能访问全局变量的一个白名单，如 Math 和 Date 。-->
+		<p>{{ 'Using mustaches: ' + rawHtml }}</p>
+		<p><span v-html="'Using v-html directive: ' + rawHtml"></span></p>
+		<p v-bind:hidden="hid">This shound be seen.</p>
+		<!--指令:参数.修饰符 v-on:submit.prevent-->
+		<div :id="'list-' + id"></div>
+		<button @click.prevent="alert">Click</button>
+	</div>
+	<div id="app2">
+		<p>Original message: "{{ message }}"</p>
+		<p>Compute message by computed: "{{ reversedMessage + ' ' + now }}"</p>
+		<p>Compute message by methods: "{{ reverseMessage() + ' ' + nowM() }}"</p>
+		<p>Compute fullName by computed: "{{fullName2}}"</p>
+		<p>Compute fullName by watch: "{{fullName}}"</p>
+		<p>
+		    Ask a yes/no question:
+		    <input v-model="question">
+		</p>
+		<p>{{ answer }}</p>
+	</div>
+	<script src="test.js"></script>
+</body> 
+</html>
+

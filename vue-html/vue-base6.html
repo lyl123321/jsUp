@@ -1,0 +1,145 @@
+<!DOCTYPE html> 
+<html> 
+<head>
+	<meta charset="utf-8" />
+	<title>VUE6</title>
+	<script src="../jquery.min.js"></script>
+	<script src="../vue.js"></script>
+	<link type="text/css" rel='stylesheet' href="../vue.css"></link>
+	<style>
+		div > p {
+			padding-left: 2em;
+		}
+		.scroll {
+			width: 400px;
+			height: 40px;
+			overflow: auto;
+			text-indent: 2em;
+		}
+	</style>
+</head> 
+<!--
+	作者：2099367442@qq.com
+	时间：2018-12-10
+	描述：v-on 指令预期值：Function | Inline Statement | Object (without argument)
+		eg: v-on:click="doThis | doThat('hello', $event)" | v-on="{ mousedown: doThis, mouseup: doThat }"
+-->
+<body>
+	<!--8、一个组件的 v-for
+		在 <ul> 元素内只有 <li> 元素会被看作有效内容。注意这里的 is="todo-item" 属性,
+		这样做实现的效果与 <todo-item> 相同，但是可以避开一些潜在的浏览器解析错误。
+    -->
+    <div id="app">
+    	<div>1、v-on 指令的值中的两类方法；<br />
+    		直接绑定的事件处理方法：
+    		<button @click="greet">Bound Method</button><br />
+    		内联处理器中的方法：
+    		<button @click="say('Hi ', $event)"> Inline Method</button><br />
+    		在内联语句中可以把特殊变量 $event 作为参数将原始的 DOM 事件传入方法
+    	</div>
+    	<div>2、v-on 指令的修饰符：
+	    	<p>
+	    		.stop - 调用 event.stopPropagation()。<br />
+				.prevent - 调用 event.preventDefault()。<br />
+				.capture - 添加事件侦听器时使用 capture 模式。<br />
+				.self - 只当事件是从侦听器绑定的元素本身触发时才触发回调。<br />
+				.{keyCode | keyAlias} - 只当事件是从特定键触发时才触发回调。<br />
+				.native - 监听组件根元素的原生事件。<br />
+				.once - 只触发一次回调。<br />
+				.left - (2.2.0) 只当点击鼠标左键时触发。<br />
+				.right - (2.2.0) 只当点击鼠标右键时触发。<br />
+				.middle - (2.2.0) 只当点击鼠标中键时触发。<br />
+				.passive - (2.3.0) 以 { passive: true } 模式添加侦听器
+	    	</p>
+    	</div>
+    	<div>3、事件修饰符：<br />
+    	.stop, .prevent, .capture, .self, .once, .passive<br />
+    		<!-- 阻止单击事件继续传播, 停止冒泡 -->
+    		<a v-on:click.stop="doThis">.stop<span> inline</span></a><br />
+    		
+			<!-- 只当在 event.target 是当前元素自身时触发处理函数 -->
+			<!-- 即事件不是从内部元素触发的 -->
+			<a v-on:click.self="doThis">.self<span> inline</span></a><br />
+			
+    		<!-- 阻止默认行为，提交事件不再重载页面 -->
+    		<form v-on:submit.prevent="doThis">.prevent <button>submit</button></form>
+    		
+    		<!-- 只有修饰符没有值 -->
+    		<form v-on:submit.prevent>.prevent without value <button>submit</button></form>
+    		
+    		<!-- 修饰符可以串联 -->
+    		使用修饰符时，顺序很重要：<br />
+    		<form v-on:click.prevent.self="doThis">.prevent.self 会阻止元素内所有元素点击事件的默认行为 <button>inline</button></form>
+    		<form v-on:click.self.prevent="doThis">.self.prevent 只会阻止对元素自身的点击事件的默认行为 <button>inline</button></form>
+    		<!-- form 中点击按钮默认触发 submit 事件，发生默认行为重载页面 -->
+    		
+    		<!-- 添加事件监听器时使用事件捕获模式 -->
+			<!-- 即元素自身触发的事件先在此处理，然后才交由内部元素进行处理 -->
+			<a v-on:click.capture="doThis">.capture</a><br />
+			
+			<!-- 点击回调只会触发一次 -->
+			<a v-on:click.once="doThis">.once</a><br />
+			
+			Vue 还对 addEventListener 中的 passive 选项提供了 .passive 修饰符:<br />
+			<!-- 事件的默认行为 (即滚动行为) 将会立即触发，而不会等待 `onScroll` 完成  -->
+			<!-- 即使其中包含 `event.preventDefault()` 亦是如此 -->
+			<div v-on:scroll.passive="onScroll" class="scroll">
+				<p>passive 选项或者 .passive 修饰符用于告知浏览器：监听器不会通过 preventDefault() 方法阻止事件的默认行为，
+				这样浏览器就不用等到监听器执行完毕再去执行默认行为，可以同时在两个线程里执行监听器中的 JavaScript 代码和
+				浏览器的默认行为了，这样尤其能够提升移动端的性能。</p>
+				<p>不要把 .passive 和 .prevent 一起使用，因为 .prevent 将会被忽略，同时浏览器可能会向你展示一个警告。请记住，
+				.passive 会告诉浏览器你不想阻止事件的默认行为。</p>
+			</div>
+    	</div>
+    	<div>4、按键修饰符<br />
+    		Vue 允许 v-on 在监听键盘事件时添加 `.keyCode` 作为按键修饰符。<br />
+    		监听键盘事件 keyup.13 时，只有在 `event.keyCode` 是 13 时才调用方法：<br />
+    		<input v-on:keyup.13="submit"><br />
+    		Vue 为最常用的按键提供了别名：<br />
+    		<ul>
+    			<li>.enter <input v-on:keyup.enter="submit"></li>
+				<li>.tab <input v-on:keyup.tab="submit"></li>
+				<li>.delete (捕获“删除”和“退格”键) <input v-on:keyup.delete="submit"></li>
+				<li>.esc <input v-on:keyup.esc="submit"></li>
+				<li>.space <input v-on:keyup.space="submit"></li>
+				<li>.up <input v-on:keyup.up="submit"></li>
+				<li>.down <input v-on:keyup.down="submit"></li>
+				<li>.left <input v-on:keyup.left="submit"></li>
+				<li>.right <input v-on:keyup.right="submit"></li>
+    		</ul>
+    		可以通过全局 Vue.config.keyCodes 对象自定义按键修饰符别名：<br />
+    		<input v-on:keyup.f1.v.up.page-down="submit" /><br />
+    		Vue.js 2.5.0 可以直接将按键名的 kebab-case 形式作为修饰符：<br />
+    		eg：v-on:keydown.page-down.page-up.home.esc
+    	</div>
+    	<div>5、系统修饰符<br />
+    		以下系统修饰符仅在相应系统修饰键保持按下状态时事件才会触发：<br />
+    		<ul>
+    			<li>.alt    eg: Alt + A <input @keyup.alt.65="submit"></li>
+				<li>.ctrl   eg: Ctrl + Click <input @click.ctrl="submit"></li>
+				<li>.shift  eg: Shift + B <input @keypress.shift.66="submit"></li>
+				<li>.meta   eg: Meta + C <input @keyup.meta.67="submit"></li>
+    		</ul>
+    		如果想要通过按下系统修饰键来触发事件，可以使用修饰键的 `.keycode` 作为修饰符：<br />
+    		Ctrl键 keyup.17 <input @keyup.17="submit">
+    		<div>2.5.0 新增的.exact 修饰符<br />
+    			.exact 修饰符允许你精确地控制由系统修饰符组合触发的事件。
+    			<ul>
+	    			<li>@click.ctrl 即使 Alt 或 Shift 被一同按下时也会触发<button @click.ctrl="click">A</button></li>
+					<li>@click.ctrl.exact 有且只有 Ctrl 被按下的时候才触发<button @click.ctrl.exact="click">B</button></li>
+					<li>@click.exact 没有任何系统修饰符被按下的时候才触发<button @click.exact="click">C</button></li>
+	    		</ul>
+    		</div>
+    		<div>2.2.0 新增的鼠标按钮修饰符<br />
+    			<ul>
+	    			<li>.left <button @click.left="click">left</button></li>
+					<li>.right <button @click.right.exact="click">right</button></li>
+					<li>.middle <button @click.middle="click">middle</button></li>
+	    		</ul>
+    		</div>
+    	</div>
+    </div>
+	
+	<script src="../vue-js/vue-base6.js"></script>
+</body> 
+</html>

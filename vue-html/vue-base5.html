@@ -1,0 +1,141 @@
+<!DOCTYPE html> 
+<html> 
+<head>
+	<meta charset="utf-8" />
+	<title>VUE5</title>
+	<script src="../jquery.min.js"></script>
+	<script src="../vue.js"></script>
+	<link type="text/css" rel='stylesheet' href="../vue.css"></link>
+</head>
+<!--
+	作者：2099367442@qq.com
+	时间：2018-12-10
+	描述：v-for 指令预期值：Array | Object | number | string
+		eg: v-for="item in array | value in object | n in 10"
+-->
+<body>
+	<div id="app">
+		<!--1、用 v-for 遍历一个数组-->
+		<div>1、用 v-for 遍历一个数组
+	        <ol>
+	        	<li v-for="item in array">
+	        		{{ item.message }}
+	        	</li>
+	        </ol>
+			<!--你也可以用 of 替代 in 作为分隔符，因为它是最接近 Js 迭代器 for...of 遍历 value 的语法：
+				<li v-for="item of array">
+			-->
+	        <!--v-for 支持一个可选的第二个参数为数组当前项的索引的别名。
+	        	在 v-for 块中，我们拥有对父作用域属性的完全访问权限。
+	        -->
+	        <ol>
+	        	<li v-for="(item, index) in array">
+	        		{{ parentMessage}} - {{ index}} - {{ item.message }}
+	        	</li>
+	        </ol>
+        </div>
+        
+        <!--2、用 v-for 遍历一个对象-->
+        <div>2、用 v-for 遍历一个对象
+	        <ol>
+	        	<li v-for="value in object">
+	        		{{ value }}
+	        	</li>
+	        </ol>
+	        <!--v-for 支持一个可选的第二个参数为对象当前属性的键名的别名-->
+	        <ol>
+	        	<li v-for="(value, key) in object">
+	        		{{ key}} : {{ value }}
+	        	</li>
+	        </ol>
+	        <!--v-for 支持一个可选的第三个参数为对象当前属性的索引的别名-->
+	        <ol>
+	        	<li v-for="(value, key, index) in object">
+	        		{{ index }} . {{ key}} : {{ value }}
+	        	</li>
+	        </ol>
+	        <!--在遍历 object 对象时，会遍历 Object.keys(object) 的结果，即 object 对象的自身可枚举属性组成的数组。
+	        	Object.keys() 返回一个属性名数组，而默认情况下 v-for 遍历的是一个对象的属性值。
+	        -->
+        </div>
+        
+        <!--3、key 
+        	key 特殊属性主要用在 Vue 的虚拟 DOM 算法，用于在新旧 nodes 对比时辨识 VNodes。
+        	尽可能在使用 v-for 时提供 key，除非遍历输出的 DOM 内容非常简单，或者是刻意依赖默认行为以获取性能上的提升。
+        -->
+        <div>3、key
+	        <ol>
+	        	<li v-for="item in items" :key="item.id">
+	        		{{ item.text }}
+	        	</li>
+	        </ol>
+        </div>
+        
+        <!--4、数组更新检测-->
+        <div>4、数组更新检测
+        	<ol>
+	        	<li v-for="item in array">{{ item.message }}</li>
+	        </ol>
+	        <button @click="mutMethod">change array by mutation method</button>
+	        <button @click="unmutMethod">change array by unmutation method</button>
+	        <button @click="indOrLen">change array by index or length</button><br />
+	        <button @click="insteadOfIndex">instead of index</button>
+	        <button @click="insteadOfLength">instead of length</button><br />
+        </div>
+        
+        <!--5、对象更新检测-->
+        <div>5、对象更新检测
+        	<ol>
+	        	<li v-for="(value, key) in object">{{ key }} : {{ value }}</li>
+	        </ol>
+	        <button @click="errorMethod">error method to add attributes</button><br />
+	        <button @click="addOneAttribute">add one attribute by 'set'</button>
+	        <button @click="addAttributes">add attributes</button><br />
+        </div>
+        
+        <!--6、一段取值范围的 v-for-->
+        <div>6、一段取值范围的 v-for
+        	<p>
+        		<span v-for="n in 10">{{ n }}</span>
+        	</p>
+        </div>
+        
+        <!--7、v-for on a <template>
+        	类似于 v-if，你也可以利用带有 v-for 的 <template> 渲染多个元素。比如：
+        -->
+        <div>7、v-for on a &lt;template&gt;
+        	<ol>
+        		<template v-for="item in items">
+        			<li>{{ item.id }}</li>
+        			<li>{{ item.text }}</li>
+        		</template>
+        	</ol>
+        </div>
+	</div>
+	<!--8、一个组件的 v-for
+		在 <ul> 元素内只有 <li> 元素会被看作有效内容。注意这里的 is="todo-item" 属性,
+		这样做实现的效果与 <todo-item> 相同，但是可以避开一些潜在的浏览器解析错误。
+    -->
+    <div id="todo-list-app">8、一个组件的 v-for
+    	<form>
+    		<label for="new-todo">Add a todo</label>
+    		<input 
+    			v-model="newTodoText" 
+    			id="new-todo"
+    			placeholder="E.g. Feed the cat" 
+    		/>
+    		<button @click.prevent="addNewTodo">Add</button>
+    	</form>
+    	<ul>
+    		<li is="todo-item"
+    			v-for="(todo, index) in todos"
+    			:text="todo.text"
+    			:key="todo.id"
+    			@remove="todos.splice(index, 1)"
+    		></li>
+    	</ul>
+    </div>
+	
+	<script src="../vue-js/vue-base5.js"></script>
+</body> 
+</html>

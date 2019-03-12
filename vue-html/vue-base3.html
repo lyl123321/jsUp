@@ -1,0 +1,58 @@
+<!DOCTYPE html> 
+<html> 
+<head>
+	<meta charset="utf-8" />
+	<title>VUE3</title>
+	<script src="../jquery.min.js"></script>
+	<script src="../vue.js"></script>
+	<link type="text/css" rel='stylesheet' href="../vue.css"></link>
+</head>
+<!--
+	作者：2099367442@qq.com
+	时间：2018-12-10
+	描述：v-bind 指令预期值：any (with argument) | Object (without argument)
+		eg: v-bind:src="imageSrc" | v-bind="{ id: someProp, 'other-attr': otherProp }
+-->
+<body>
+	<div id="app">
+		<!-- 绑定一个属性 -->
+		<img v-bind:src="imageSrc">
+		
+		<!-- 缩写 -->
+		<img :src="imageSrc">
+		
+		<!-- 内联字符串拼接 -->
+		<img :src="'../images/' + fileName">
+		
+		<!-- class 绑定 -->
+		<div class="static" :class="{ red: isRed }">classdiv1</div>
+		<div :class="classObject">classdiv2</div>
+		<div :class="[classA, classB]">classdiv3</div>
+		<div :class="[classA, { classB: isB, classC: isC }]">classdiv4</div>
+		
+		<!-- style 绑定 -->
+		<div :style="{ color: activeColor, fontSize: size + 'px' }">stylediv1</div>
+		<div :style="[styleObjectA, styleObjectB]">stylediv2</div>
+		
+		<!-- 绑定一个有属性的对象 -->
+		<div v-bind="{ id: someProp, 'other-attr': otherProp }">div1</div>
+		
+		<!-- v-bind 默认绑定到 DOM 节点的 attribute 上，使用 .prop 修饰符后，会绑定到 DOM 属性即property；
+		使用 property 获取最新的值，attribute 里的属性的值是 html 标签上原始的值；
+		attribute 设置的自定义属性会在渲染后的 HTML 标签里显示，property 不会。
+		可以通过 property 使用自定义属性存储变量，避免暴露数据，防止污染 HTML 结构-->
+		<div v-bind:text-content.prop="text"></div>
+		
+		<!-- prop 绑定。“prop”必须在 my-component 中声明。-->
+		<my-component 
+			class="baz boo" 
+			:class="{ active: isActive }" 
+			:custom1="customa" 
+			:custom2="customb"
+			:custom3.prop="customc">
+		</my-component>
+	</div>
+	<script src="../vue-js/vue-base3.js"></script>
+</body> 
+</html>
+

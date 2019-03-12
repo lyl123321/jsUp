@@ -1,0 +1,77 @@
+1\旋转木马
+/*
+<body> 
+	<div class="box">
+		<div class="stage">
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+		</div> 
+	</div>
+</body>
+*/
+*{
+	margin: 0;
+	padding: 0;
+}
+.box{
+	margin: 100px auto;
+	perspective: 1000px;
+}
+.stage{
+	margin: 0 auto;
+	background: whitesmoke;
+	position: relative;
+	width: 200px;
+	height: 100px;
+	transform: rotateX(-8deg);
+	transform-style: preserve-3d;
+	-webkit-animation: rot steps(6,start) 10s infinite;
+	aanimation: rot steps(6,end) 10s infinite;
+}
+.stage div{
+	position: absolute;
+	width: 200px;
+	height: 100px;
+}
+.stage div:nth-child(1){
+	background-color: red;
+	transform: rotateY(0deg) translateZ(350px);
+}
+.stage div:nth-child(2){
+	background-color: orange;
+	transform: rotateY(60deg) translateZ(350px);
+}
+.stage div:nth-child(3){
+	background-color: yellow;
+	transform: rotateY(120deg) translateZ(350px);
+}
+.stage div:nth-child(4){
+	background-color: green;
+	transform: rotateY(180deg) translateZ(350px);
+}
+.stage div:nth-child(5){
+	background-color: blue;
+	transform: rotateY(240deg) translateZ(350px);
+}
+.stage div:nth-child(6){
+	background-color: blueviolet;
+	transform: rotateY(300deg) translateZ(350px);
+}
+.stage div:nth-child(7){
+	background-color: lightcyan;
+	transform: rotateY(60deg);
+}
+.stage div:nth-child(8){
+	background-color: mistyrose;
+	transform: rotateY(120deg);
+}
+@keyframes rot{
+	from{transform: rotateX(-8deg) rotateY(0deg);}
+	to{transform: rotateX(-8deg) rotateY(-360deg);}
+}

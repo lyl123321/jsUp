@@ -1,0 +1,21 @@
+div {
+	border: solid 2px;
+	padding: 5px;
+	margin: 5px;
+}
+.out{
+	overflow: hidden;
+	border: solid 2px;
+	padding: 10px;
+	margin: 100px;
+	background: yellow;
+}
+.center-vertical {
+	overflow: hidden;
+	background: red;
+}
+.float{
+	width: 100px;
+	height: 100px;
+	float: left;
+}

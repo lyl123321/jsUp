@@ -1,0 +1,65 @@
+4\CSS小技巧
+/*1、鼠标无光标*/
+*{
+    cursor: none!important;
+}
+
+/*2、简单的文字模糊效果*/
+p {
+    color: transparent;
+    text-shadow: #111 0 0 4px;
+}
+
+/*3、我所青睐的垂直居中*/
+.center-vertical {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+/*完全居中*/
+.center {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+/*4、多重阴影*/
+div {
+    box-shadow: 0 0 0 6px rgba(0, 0, 0, 0.2), 0 0 0 12px rgba(0, 0, 0, 0.2), 0 0 0 18px rgba(0, 0, 0, 0.2), 0 0 0 24px rgba(0, 0, 0, 0.2), 0 0 0 30px rgba(0, 0, 0, 0.2), 0 0 0 36px rgba(0, 0, 0, 0.2);
+    height: 200px;
+    margin: 50px auto;
+    width: 400px
+}
+/*不透明度重叠时数值会叠加,不过不是将数值直接相加*/
+
+/*5、实时编辑CSS
+ * 通过设置style标签的display:block样式可以让页面的style标签显示出来，并且加上
+ * contentEditable属性后可以让样式成为可编辑状态，更改后的样式效果也是实时更新
+ * 呈现的。
+ * <!DOCTYPE html>
+	<html>
+	    <body>
+	        <style style="display:block" contentEditable>
+	        	body { color: blue }
+	        </style>
+	    </body>
+	</html>
+ */
+
+/*6、创建长宽比固定的元素
+ * 利用子块的width,padding中的百分比是根据父块的 width来计算的这一CSS规则，
+ * 实现了长宽比为 width的百分数：padding-bottom的百分数的块。
+ * <div style="width: 100%; position: relative; padding-bottom: 20%;">
+	    <div style="position: absolute; left: 0; top: 0; right: 0; bottom: 0;background-color:yellow;">
+	        this content will have a constant aspect ratio that varies based on the width.
+	    </div>
+	</div>
+ */
+
+/*7、CSS中也可以做简单运算
+ * 不推荐使用，耗费资源
+ * .container{
+		background-position: calc(100% - 50px) calc(100% - 20px);
+	}
+ */
