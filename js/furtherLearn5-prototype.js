@@ -31,3 +31,87 @@ var john = Object.create(new User(), {
 	url: { value: 'http://google.com/' }
 });
 console.log( john.name );	// John
+
+//普通写法
+function Person(name, age) {
+    this.name = name;
+    this.age = age;
+}
+
+Person.prototype.getName = function() {
+    return this.name;
+}
+
+function cPerson(name, age, job) {
+	Person.call(this, name, age);
+    this.job = job;
+}
+
+cPerson.prototype = new Person(null, null);
+//cPerson.prototype = Object.create(Person.prototype);
+cPerson.prototype.constructor = cPerson;
+
+var cperson = new cPerson();
+
+console.log('getName' in cperson);	//true
+//cperson.constructor 和 cperson.constructor.prototype.constructor 永远相等
+//Object.getPrototypeOf(cperson) 相当于cperson._proto_ ,永远可以得到正确的原型
+console.log(cperson.constructor);
+console.log(cperson.constructor.prototype.constructor);
+console.log(Object.getPrototypeOf(cperson));
+console.log(Object.getPrototypeOf(Object.getPrototypeOf(cperson)));
+
+//比较
+//1、class 写法
+class Queue {
+	constructor(contents = []) {
+	    this._queue = [...contents];
+	}
+	
+	fn1() {
+		const value = this._queue[0];
+	  this._queue.splice(0, 1);
+	  return value;
+	}
+}
+
+class PeekableQueue extends Queue {
+	constructor(contents) {
+	    super(contents);
+	}
+	
+	fn2() {
+		return this._queue[1];
+	}
+}
+
+let p = new PeekableQueue([1,2]);
+console.log(p instanceof PeekableQueue, p instanceof Queue);
+console.log(typeof PeekableQueue, p.constructor.prototype);
+
+//2、原型写法
+function Queue(contents = []) {
+	this._queue = [...contents];
+}
+
+Queue.prototype.fn1 = function() {
+	const value = this._queue[0];
+	this._queue.splice(0, 1);
+	return value;
+}
+
+function PeekableQueue(contents) {
+	Queue.call(this, contents);
+}
+
+//PeekableQueue.prototype = new Queue();
+PeekableQueue.prototype = Object.create(Queue.prototype);
+PeekableQueue.prototype.constructor = PeekableQueue;
+
+PeekableQueue.prototype.fn2 = function() {
+	return this._queue[1];
+}
+
+let p = new PeekableQueue([1,2]);
+console.log(p instanceof PeekableQueue, p instanceof Queue);
+console.log(typeof PeekableQueue, p.constructor.prototype);

@@ -64,13 +64,13 @@ with ({
 1、this是在进入上下文时确定的，这个值每次调用都不同，但是在代码运行时this值是不变的。
 2、非严格模式下，对于[函数名]()这种形式，JS会从函数的作用域链中找到函数所属的对象（AO 或者
 with对象 或者 存储着命名函数表达式标识符的特殊对象）：
-对象可见(全局AO或者 with对象)，直接赋值；对象不可见（函数AO或者特殊对象），赋值为 window。
+对象可见(全局AO或者 with对象)，this 指向其；对象不可见（函数AO或者特殊对象），this 指向 window。
 3、严格模式下，[函数名]()这种调用形式，函数内部的this值为undefined。
 */
 
 /*我的总结：
-1、()左边为标识符时，JS会尝试找到调用标识符的对象，普通对象直接赋值给this，作用域链中的对
-象：非严对象可见，直接赋给this；非严对象不可见，this值为window；严格，this值为undefined。
+1、()左边为标识符时，JS会尝试找到调用标识符的对象，普通对象直接赋值给this，作用域链中的隐式对象（包括 window 对象和 with 对象）：
+非严对象可见，直接赋给this；非严对象不可见，this值为window；严格模式，不管隐式对象可不可见，this值为undefined。
 2、()左边为表达式时，JS先对表达式求值，然后再判断：表达式值为函数对象，即找不到函数所属
 的对象，非严window，严格undefined；表达式值为标识符，按第一种情况判断。
 3、特殊情况：
@@ -86,11 +86,3 @@ $("#demo1,#demo2").on('keyup input change','input',validate)；
 setTimeout和setInterval方法中的this值为window；
 箭头函数的this和父执行上下文中的this一致。
 */
-
-实现 bind 方法:
-Function.prototype.bind2 = function(th) {
-	var self = this, args = arguments;
-	return function(){
-		self.apply(th, [].slice.call(args, 1).concat([].slice.call(arguments)));
-	}
-}
